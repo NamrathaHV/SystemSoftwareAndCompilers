@@ -1,0 +1,43 @@
+/* 1E-6L. Lex program to copy the content of one file to another file */
+
+
+%{
+#include<stdio.h>
+#include<string.h>
+char line[100];
+ 
+%}
+ 
+/* Rule Section */
+/* Rule 1 writes the string stored in line
+   character array to file output.txt */
+/* Rule 2 copies the matched token
+   i.e every character except newline character
+    to line character array  */
+ 
+%%
+['\n']    { fprintf(yyout,"%s\n",line);line[0]='\0';}
+(.*)      { strcpy(line,yytext); }
+<<EOF>> { fprintf(yyout,"%s",line); return 0;}
+%%
+ 
+ 
+int yywrap()
+{
+    return 1;
+}
+ 
+/* code section */
+int main()
+{
+	extern FILE *yyin, *yyout;
+        /* open the source file
+           in read mode */
+	yyin=fopen("6L_1E_input","r");
+ 
+         
+        /* open the output file
+           in write mode */
+	yyout=fopen("6L_1E_output","w");
+	yylex();
+}
